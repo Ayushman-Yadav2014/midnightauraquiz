@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scent Identity Quiz</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 600px; margin: auto; background: #f9f9f9; }
+        .question { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        button { background: #333; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-size: 16px; }
+        #result { margin-top: 20px; padding: 20px; display: none; border: 2px solid #333; border-radius: 8px; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>✨ Find Your Signature Scent</h2>
+   
+    <div id="quiz-container">
+        <p>Select your answers for all 5 questions:</p>
+        <div id="questions-list"></div>
+        <button onclick="calculateResult()">Show My Result</button>
+    </div>
+
+    <div id="result">
+        <h3 id="scent-name"></h3>
+        <p id="scent-desc"></p>
+    </div>
+
+    <script>
+        const data = [
+            { q: "Which destination feels most like you?", options: ["Tokyo nightlife", "Paris café streets", "Tropical island", "Ocean yacht getaway", "Santorini sunset", "Snowy rose garden"] },
+            { q: "Pick an outfit style:", options: ["Bold monochrome", "Elegant luxury", "Casual colorful", "Coastal cool", "Golden-hour aesthetic", "Soft vintage style"] },
+            { q: "Which season matches your energy?", options: ["Winter nights", "Autumn evenings", "Summer mornings", "Breezy spring afternoons", "Late summer sunsets", "Snowy winter mornings"] },
+            { q: "Your friends describe you as...", options: ["Intense", "Sophisticated", "Fun", "Free-spirited", "Positive", "Gentle"] },
+            { q: "What feeling do you want your perfume to give?", options: ["Powerful & mysterious", "Elegant & timeless", "Fresh & energetic", "Cool & refreshing", "Warm & radiant", "Soft & calm"] }
+        ];
+
+        const resultsMap = {
+            1: { name: "Reincarnation", desc: "Bold, edgy, and deeply mysterious." },
+            2: { name: "Essence", desc: "Polished, chic, and timelessly elegant." },
+            3: { name: "Citrus", desc: "Vibrant, energetic, and full of life." },
+            4: { name: "Aqua Infinity", desc: "Refreshing, adventurous, and free-spirited." },
+            5: { name: "Sun Glaze", desc: "Warm, radiant, and glowy." },
+            6: { name: "ArticRose", desc: "Soft, romantic, and delicately poetic." }
+        };
+
+        const container = document.getElementById('questions-list');
+        data.forEach((item, qIdx) => {
+            let html = `<div class="question"><strong>Q${qIdx+1}: ${item.q}</strong><br>`;
+            item.options.forEach((opt, oIdx) => {
+                html += `<label><input type="radio" name="q${qIdx}" value="${oIdx+1}"> ${opt}</label><br>`;
+            });
+            html += `</div>`;
+            container.innerHTML += html;
+        });
+
+        function calculateResult() {
+            let counts = {};
+            for(let i=0; i<5; i++) {
+                let val = document.querySelector(`input[name="q${i}"]:checked`)?.value;
+                if(val) counts[val] = (counts[val] || 0) + 1;
+            }
+           
+            let winner = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b, 1);
+           
+            document.getElementById('scent-name').innerText = "Your Scent: " + resultsMap[winner].name;
+            document.getElementById('scent-desc').innerText = resultsMap[winner].desc;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
